@@ -152,15 +152,11 @@ function useBLE(): BluetoothLowEnergyApi {
         console.log(characteristic.value);
       })
       .then(() => {
-        
-        //connectedDevice.cancelConnection();
         setConnectedDevice(null);
       })
       .catch((error) => {
         console.log(error);
       });
-
-    
     }
   };
 
