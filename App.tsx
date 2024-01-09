@@ -1,13 +1,7 @@
 import React, { useState } from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { SafeAreaView, Text, TouchableOpacity, View, Image} from "react-native";
+import { TextStyles, SectionStyles, ImageStyles, ButtonStyles} from "./src/MainStyleSheet";
 import DeviceModal from "./DeviceConnectionModal";
-import { PulseIndicator } from "./PulseIndicator";
 import useBLE from "./useBLE";
 
 const App = () => {
@@ -21,9 +15,16 @@ const App = () => {
     minutes,
     seconds,
     editMode,
+    dualSide,
+    errorCode,
     disconnectFromDevice,
-    increasePowerValue,
+    increaseValue,
+    decreaseValue,
+    sessionStart,
+    sessionPause,
+    modeChange,
   } = useBLE();
+
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const scanForDevices = async () => {
@@ -43,37 +44,103 @@ const App = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.heartRateTitleWrapper}>
+    <SafeAreaView style={SectionStyles.container}>
+      <View style={SectionStyles.TitleWrapper}>
            {connectedDevice ? (
           <>
-            <Text style={styles.heartRateTitleText}>Timer:</Text>
-            <Text style={styles.heartRateText}>{minutes}:{seconds.toString().padStart(2,'0')}</Text>
-            <Text style={styles.heartRateTitleText}>Machine Power Level Is:</Text>
-            <Text style={styles.heartRateText}>{powerLevel}</Text>
-            <TouchableOpacity
-            onPress={increasePowerValue}
-              style={styles.ctaButton}
-             >
-              <Text style={styles.ctaButtonText}>
-               {editMode > 0 ? "ADJ Timer" : "ADJ Power"}
-              </Text>
-            </TouchableOpacity>
+            {errorCode == 1 ? 
+                    (
+                      <View style={SectionStyles.container}>
+                        <View style={SectionStyles.rect}>
+                        <Text style={TextStyles.errorText}>Attachment Not Detected. Please check lead connections.</Text>
+                        </View>
+                      </View >
+                    ) : (
+                    <View style={SectionStyles.container}>
+
+                      <View style={SectionStyles.rect}>
+                        <Text style={TextStyles.mainText}>{ editMode > 0 ? "Timer >" : "Timer" }</Text>
+                        <Text style={TextStyles.headingText}>{minutes}:{seconds.toString().padStart(2,'0')}</Text>
+                        <Text style={TextStyles.mainText}>{ editMode > 0 ? "Power" : "Power >" }</Text>
+                        <Text style={TextStyles.headingText}>{powerLevel}</Text>
+                      </View>
+      
+                      <View style={SectionStyles.rect2Row}>
+                        <View style={SectionStyles.rect2}>
+                          <TouchableOpacity
+                            onPress={sessionStart}
+                            style={ButtonStyles.button}
+                          >
+                            <Text style={TextStyles.btnText}>START</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={sessionPause}
+                            style={ButtonStyles.button2}
+                          >
+                            <Text style={TextStyles.btnText}>STOP</Text>
+                          </TouchableOpacity>
+                        </View>
+                    
+                        <View style={SectionStyles.rect3}>
+                          <TouchableOpacity
+                            onPress={increaseValue}
+                            style={ButtonStyles.button}
+                          >
+                            <Text style={TextStyles.btnText}>UP</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={decreaseValue}
+                            style={ButtonStyles.button}
+                          >
+                            <Text style={TextStyles.btnText}>DOWN</Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+
+                      <View >
+                      <TouchableOpacity
+                            onPress={modeChange}
+                            style={ButtonStyles.button}
+                          >
+                            <Text style={TextStyles.btnText}>MODE</Text>
+                          </TouchableOpacity>
+                      </View>
+                      <View >
+                        {dualSide > 0 && (
+                        <TouchableOpacity
+                            onPress={decreaseValue}
+                            style={ButtonStyles.ctaButton}
+                          >
+                          <Text style={TextStyles.btnText}>Switch Sides</Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                  
+                    </View>
+              )}
           </>
         ) : (
-          <Text style={styles.heartRateTitleText}>
-            Please Connect to your MagnaWave Device
-          </Text>
+          <View style={SectionStyles.container}>
+            <View style={ImageStyles.logoContainer}> 
+              <Image source={require('./assets/adaptive-icon.png')} style={ImageStyles.logoImage} />
+            </View>
+            <View style={SectionStyles.rect}>
+            <Text style={TextStyles.BgText}>
+              Please Connect to your MagnaWave Device
+            </Text>
+            </View>
+          </View>
         )}
       </View>
       <TouchableOpacity
         onPress={connectedDevice ? disconnectFromDevice : openModal}
-        style={styles.ctaButton}
+        style={ButtonStyles.ctaButton}
       >
-        <Text style={styles.ctaButtonText}>
+        <Text style={TextStyles.btnText}>
           {connectedDevice ? "Disconnect" : "Connect"}
         </Text>
       </TouchableOpacity>
+      <Image source={require('./assets/MagnaWave.png')} style={ImageStyles.nameImage} />
       <DeviceModal
         closeModal={hideModal}
         visible={isModalVisible}
@@ -83,42 +150,5 @@ const App = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f2f2f2",
-  },
-  heartRateTitleWrapper: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  heartRateTitleText: {
-    fontSize: 30,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginHorizontal: 20,
-    color: "black",
-  },
-  heartRateText: {
-    fontSize: 25,
-    marginTop: 15,
-  },
-  ctaButton: {
-    backgroundColor: "#FF6060",
-    justifyContent: "center",
-    alignItems: "center",
-    height: 50,
-    marginHorizontal: 20,
-    marginBottom: 5,
-    borderRadius: 8,
-  },
-  ctaButtonText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "white",
-  },
-});
 
 export default App;

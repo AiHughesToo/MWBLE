@@ -14,19 +14,33 @@ import base64 from "react-native-base64";
 const MWserviceUUID = "86aba96c-6941-437f-a594-0ac4ee690a7a";
 const MWoutputUUID = "b4bd87a3-6222-4468-a208-84ee0078eef7";
 const MWinputUUID = "6e2adbf6-19b5-42c8-93fb-e34560015b59";
+const increase = "AA==";
+const decrease = "AQ==";
+const changeMode = "Ag==";
+const startSession = "BA==";
+const pauseSession = "Aw==";
+const changeSides = "BQ==";
+const disconnectMachine = "Bg==";
+
 
 interface BluetoothLowEnergyApi {
   requestPermissions(): Promise<boolean>;
   scanForPeripherals(): void;
   connectToDevice: (deviceId: Device) => Promise<void>;
   disconnectFromDevice: () => void;
-  increasePowerValue: () => void;
+  increaseValue: () => void;
+  decreaseValue: () => void;
+  sessionStart: () => void;
+  sessionPause: () => void;
+  modeChange: () => void;
   connectedDevice: Device | null;
   allDevices: Device[];
   powerLevel: number;
   minutes: number;
   seconds: number;
   editMode: number;
+  dualSide: number;
+  errorCode: number;
 }
 
 function useBLE(): BluetoothLowEnergyApi {
@@ -37,6 +51,8 @@ function useBLE(): BluetoothLowEnergyApi {
   const [minutes, setMinutes] = useState<number>(0);
   const [seconds, setSeconds] = useState<number>(0);
   const [editMode, setEditMode] = useState<number>(0);
+  const [dualSide, setDualSide] = useState<number>(0);
+  const [errorCode, setErrorCode] = useState<number>(0);
 
   const requestAndroid31Permissions = async () => {
     const bluetoothScanPermission = await PermissionsAndroid.request(
@@ -131,25 +147,73 @@ function useBLE(): BluetoothLowEnergyApi {
 
   const disconnectFromDevice = () => {
     if (connectedDevice) {
-      bleManager.cancelDeviceConnection(connectedDevice.id);
+      connectedDevice.writeCharacteristicWithResponseForService(MWserviceUUID, MWinputUUID, disconnectMachine ) 
+      .then((characteristic) => {
+        console.log(characteristic.value);
+      })
+      .then(() => {
+        
+        //connectedDevice.cancelConnection();
+        setConnectedDevice(null);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
-      connectedDevice.cancelConnection();
-      setConnectedDevice(null);
-      
+    
     }
   };
 
-  const increasePowerValue = () => {
+  const increaseValue = () => {
     if (connectedDevice) {
+      connectedDevice.writeCharacteristicWithResponseForService(MWserviceUUID, MWinputUUID, increase )
+      .then((characteristic) => {
+        console.log(characteristic.value);
+        return
+      }); 
+    }
+  };
 
-      connectedDevice.writeCharacteristicWithResponseForService(MWserviceUUID, MWinputUUID, 'AA==' )
+  const decreaseValue = () => {
+    if (connectedDevice) {
+      connectedDevice.writeCharacteristicWithResponseForService(MWserviceUUID, MWinputUUID, decrease )
       .then((characteristic) => {
         console.log(characteristic.value);
         return
       });
-      
     }
   };
+
+  const sessionStart = () => {
+    if (connectedDevice) {
+      connectedDevice.writeCharacteristicWithResponseForService(MWserviceUUID, MWinputUUID, startSession )
+      .then((characteristic) => {
+        console.log(characteristic.value);
+        return
+      }); 
+    }
+  };
+
+  const sessionPause = () => {
+    if (connectedDevice) {
+      connectedDevice.writeCharacteristicWithResponseForService(MWserviceUUID, MWinputUUID, pauseSession )
+      .then((characteristic) => {
+        console.log(characteristic.value);
+        return
+      });
+    }
+  };
+
+  const modeChange = () => {
+    if (connectedDevice) {
+      connectedDevice.writeCharacteristicWithResponseForService(MWserviceUUID, MWinputUUID, changeMode )
+      .then((characteristic) => {
+        console.log(characteristic.value);
+        return
+      }); 
+    }
+  };
+
 
   const onMachineUpdate = (
     error: BleError | null,
@@ -163,24 +227,13 @@ function useBLE(): BluetoothLowEnergyApi {
       return -1;
     }
     const rawData = base64.decode(characteristic.value);
-    const firstBitValue: number = Number(rawData) & 0x01;
-    console.log(firstBitValue);
-    console.log("Power Level");
-    console.log(rawData[1].charCodeAt(0));
-    console.log("Minutes");
-    console.log(rawData[2].charCodeAt(0));
-    console.log("Seconds");
-    console.log(rawData[3].charCodeAt(0));
-    console.log("Mode");
-    console.log(rawData[4].charCodeAt(0));
-    console.log("Running");
-    console.log(rawData[5].charCodeAt(0));
-    console.log("Error code");
-    console.log(rawData[6].charCodeAt(0));
+
+    setErrorCode(rawData[6].charCodeAt(0));
     setPowerLevele(rawData[1].charCodeAt(0));
     setMinutes(rawData[2].charCodeAt(0));
     setSeconds(rawData[3].charCodeAt(0));
     setEditMode(rawData[4].charCodeAt(0));
+    setDualSide(rawData[0].charCodeAt(0));
     
   };
 
@@ -201,14 +254,20 @@ function useBLE(): BluetoothLowEnergyApi {
     scanForPeripherals,
     requestPermissions,
     connectToDevice,
-    increasePowerValue,
+    increaseValue,
+    decreaseValue,
     disconnectFromDevice,
+    sessionStart,
+    sessionPause,
+    modeChange,
     allDevices,
     connectedDevice,
     powerLevel,
     minutes,
     seconds,
     editMode,
+    dualSide,
+    errorCode,
   };
 }
 
