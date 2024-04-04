@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "expo-ble-sample",
-    "slug": "ble-test",
-    "version": "1.0.0",
+    "name": "MagnaWave Remote App",
+    "slug": "magnawave-remote-app",
+    "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -32,7 +32,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.dfriyia2.expoblesample"
+      "bundleIdentifier": "com.magnawavepemf.mwremoteapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -44,14 +44,14 @@
         "android.permission.BLUETOOTH_ADMIN",
         "android.permission.BLUETOOTH_CONNECT"
       ],
-      "package": "com.dfriyia2.expoblesample"
+      "package": "com.magnawavepemf.mwremoteapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "468906a3-04ab-44a5-8a13-d68dbae8b5af"
+        "projectId": "9d4e108b-2987-423a-93ef-0df3e3bbed27"
       }
     },
     "owner": "magnawavepemf"

@@ -27,7 +27,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>com.dfriyia2.expoblesample</string>
+          <string>com.magnawavepemf.mwremoteapp</string>
         </array>
       </dict>
     </array>
@@ -49,7 +49,7 @@
       </dict>
     </dict>
     <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>Allow $(PRODUCT_NAME) to connect to bluetooth devices</string>
+    <string>Allow MagnaWave Remote App to connect to bluetooth devices</string>
     <key>UIBackgroundModes</key>
     <array>
       <string>bluetooth-central</string>

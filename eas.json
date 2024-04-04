@@ -1,12 +1,27 @@
 {
-    "build": {
-      "development": {
-        "developmentClient": true,
-        "distribution": "internal"
-      },
-      "preview": {
-        "distribution": "internal"
-      },
-      "production": {}
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {
+      "autoIncrement": true
     }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "softwaredevelopment@magnawavepemf.com",
+        "ascAppId": "6480421047",
+        "appleTeamId": "UC4NB87BTQ"
+      }
+    }
+  },
+  "cli": {
+    "promptToConfigurePushNotifications": false,
+    "appVersionSource": "remote"
   }
+}
