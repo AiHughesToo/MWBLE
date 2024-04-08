@@ -65,6 +65,15 @@ const Background = StyleSheet.create({
       flex: 1, 
       marginTop: 10,
     },
+    rect5: {
+      width: width * 0.95,
+      marginTop: 10,
+      marginRight: 5,
+      marginLeft: 5,
+      marginBottom: 5,
+      paddingBottom: 10,
+      alignSelf: "center",
+    },
     rect2Row: {
       height: 169,
       flexDirection: "row",
@@ -100,8 +109,8 @@ const Background = StyleSheet.create({
 
   const ButtonStyles = StyleSheet.create({
     button: {
-      width: 50,
-      height: 50,
+      width: 60,
+      height: 60,
       justifyContent: "center",
       alignItems: "center",
       alignSelf: 'center',
@@ -120,8 +129,8 @@ const Background = StyleSheet.create({
       marginTop: 28,
     },
     start: {
-      width: 200,
-      height: 40,
+      width: 300,
+      height: 60,
       justifyContent: "center",
       alignItems: "center",
       alignSelf: 'center',
@@ -130,8 +139,8 @@ const Background = StyleSheet.create({
       marginTop: 5,
     },
     stop: {
-      width: 200,
-      height: 40,
+      width: 300,
+      height: 60,
       justifyContent: "center",
       alignItems: "center",
       alignSelf: 'center',
@@ -140,12 +149,22 @@ const Background = StyleSheet.create({
       marginTop: 5,
     },
     incrimentButton: {
-      width: 50,
-      height: 50,
+      width: 60,
+      height: 60,
       justifyContent: "center",
       alignItems: "center",
       alignSelf: 'center',
       backgroundColor: "#0099e0",
+      borderRadius: 50,
+      marginTop: 5,
+    },
+    incrimentButtonDead: {
+      width: 55,
+      height: 55,
+      justifyContent: "center",
+      alignItems: "center",
+      alignSelf: 'center',
+      backgroundColor: "#ddd",
       borderRadius: 50,
       marginTop: 5,
     },
@@ -173,12 +192,16 @@ const Background = StyleSheet.create({
       paddingBottom: 10
     },
     mainText: {
-      color: '#000',
-      fontSize: 30,
+      color: '#fff',
+      fontSize: 20,
       fontWeight: '500',
-      paddingTop: 10,
-      paddingBottom: 8,
-      paddingLeft: 10
+      textAlign: "center",
+    },
+    modeText: {
+      color: '#0099e0',
+      fontSize: 25,
+      fontWeight: '500',
+      textAlign: "center",
     },
     BgText: {
       fontSize: 25,
@@ -198,13 +221,12 @@ const Background = StyleSheet.create({
       justifyContent: 'center',
       alignSelf: 'center',
       color: '#d6370f',
-      fontSize: 40,
+      fontSize: 20,
       fontWeight: '700',
-      paddingTop: 10,
-      paddingBottom: 10
+      paddingTop: 15,
+      paddingBottom: 15
     },
     medText: {
-      
       color: '#fff',
       fontSize: 16,
       fontWeight: '500',
@@ -230,7 +252,7 @@ const Background = StyleSheet.create({
       alignSelf: 'center',
       color: '#fff',
       fontSize: 50,
-      lineHeight: 53,
+      lineHeight: 55,
       fontWeight: '600'
   }
   })

@@ -14,12 +14,11 @@ const App = () => {
     powerLevel,
     minutes,
     seconds,
-    editMode,
     dualSide,
     running,
     errorCode,
-    mydata,
     errorOne,
+    editMode,
     disconnectFromDevice,
     increaseTimerValue,
     decreaseTimerValue,
@@ -52,6 +51,10 @@ const App = () => {
     Linking.openURL('https://www.magnawavepemf.com/ble_instructions');
   };
 
+  const handlePressToo = () => {
+    Linking.openURL('https://magnawavepemf.zendesk.com/hc/en-us');
+  };
+  
   return (
     <SafeAreaView style={SectionStyles.containerTwo}>
       <View style={SectionStyles.TitleWrapper}>
@@ -68,7 +71,6 @@ const App = () => {
                     <View style={SectionStyles.container}>
                       
                       <View style={SectionStyles.TitleWrapper}>
-                        <Text style={TextStyles.BgText}>{mydata}</Text>
                         <Text style={TextStyles.BgText}>{connectedDevice.name}</Text>
                       </View>
                     
@@ -77,29 +79,56 @@ const App = () => {
                       </View>
 
                       <View style={SectionStyles.rect3}>
-                          <TouchableOpacity
-                            onPress={increaseTimerValue}
-                            style={ButtonStyles.incrimentButton}
-                          >
-                            <Text style={TextStyles.incBtnText}>+</Text>
-                          </TouchableOpacity>
 
-                          <Text style={TextStyles.mainText}>TIMER</Text>
-                          
+                        {running > 0 ? 
+                           <TouchableOpacity
+                            style={ButtonStyles.incrimentButtonDead}
+                           >
+                           <Text style={TextStyles.incBtnText}>-</Text>
+                          </TouchableOpacity>
+                          :
                           <TouchableOpacity
                             onPress={decreaseTimerValue}
                             style={ButtonStyles.incrimentButton}
                           >
-                            <Text style={TextStyles.incBtnText}>-</Text>
+                           <Text style={TextStyles.incBtnText}>-</Text>
                           </TouchableOpacity>
-                      </View>                      
+                        }
+ 
+                        <Text style={TextStyles.modeText}>{editMode > 0 ? "TIMER >" : "TIMER" }</Text>
 
+                        {running > 0 ? 
+                          <TouchableOpacity
+                            style={ButtonStyles.incrimentButtonDead}
+                            >
+                            <Text style={TextStyles.incBtnText}>+</Text>
+                          </TouchableOpacity>
+                          :
+                          <TouchableOpacity
+                            onPress={increaseTimerValue}
+                            style={ButtonStyles.incrimentButton}
+                            >
+                            <Text style={TextStyles.incBtnText}>+</Text>
+                          </TouchableOpacity>
+                        }
+                         
+                      </View>                      
 
                       <View style={SectionStyles.rect}>
                         <Text style={TextStyles.headingText}>{powerLevel}</Text>
                       </View>
 
                       <View style={SectionStyles.rect3}>
+                                  
+                           <TouchableOpacity
+                            onPress={decreasePowerValue}
+                            style={ButtonStyles.incrimentButton}
+                          >
+                            <Text style={TextStyles.incBtnText}>-</Text>
+                          </TouchableOpacity>
+
+                          <Text style={TextStyles.modeText}>{editMode > 0 ? "POWER" : "POWER >" }</Text>
+    
                           <TouchableOpacity
                             onPress={increasePowerValue}
                             style={ButtonStyles.incrimentButton}
@@ -107,14 +136,6 @@ const App = () => {
                             <Text style={TextStyles.incBtnText}>+</Text>
                           </TouchableOpacity>
 
-                          <Text style={TextStyles.mainText}>POWER</Text>
-                          
-                          <TouchableOpacity
-                            onPress={decreasePowerValue}
-                            style={ButtonStyles.incrimentButton}
-                          >
-                            <Text style={TextStyles.incBtnText}>-</Text>
-                          </TouchableOpacity>
                         </View>                      
       
                     
@@ -162,7 +183,7 @@ const App = () => {
               </Text>
             <View style={SectionStyles.rect4}>  
               <Text style={TextStyles.medText}>
-                This Bluetooth remote app is for MagnaWave Julian and Julian Duo models manufactured after Jan 1 of 2023.
+                This Bluetooth remote app is for MagnaWave Julian models manufactured after Jan 1 of 2023.
               </Text>
               <Text style={TextStyles.medText}>
                 For instructions you can visit
@@ -171,11 +192,20 @@ const App = () => {
                   <Text style={{ color: 'white', textDecorationLine: 'underline', fontSize: 16 }}>
                     magnawavepemf.com/ble_instructions
                   </Text>
-                </TouchableOpacity>
+              </TouchableOpacity>
+
+              <Text style={TextStyles.medText}>
+                For service and support visit
+              </Text>
+              <TouchableOpacity onPress={handlePressToo}>
+                  <Text style={{ color: 'white', textDecorationLine: 'underline', fontSize: 16 }}>
+                    magnawavepemf.com/support
+                  </Text>
+              </TouchableOpacity>
             </View>
-            <View style={SectionStyles.rect}>
-            <Text style={TextStyles.BgText}>
-              Please connect to your MagnaWave device
+            <View style={SectionStyles.rect5}>
+            <Text style={TextStyles.mainText}>
+              Please connect to a MagnaWave device
             </Text>
             </View>
           </View>
@@ -186,10 +216,9 @@ const App = () => {
         style={ButtonStyles.ctaButton}
       >
         <Text style={TextStyles.btnText}>
-          {connectedDevice ? "Disconnect" : "Connect"}
+          {connectedDevice ? "Disconnect" : "Scan For Devices"}
         </Text>
       </TouchableOpacity>
-      <Text style={TextStyles.BgText}>{errorOne}</Text>
       <Image source={require('./assets/MagnaWave.png')} style={ImageStyles.nameImage} />
       <DeviceModal
         closeModal={hideModal}

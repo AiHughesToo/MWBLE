@@ -174,65 +174,36 @@ function useBLE(): BluetoothLowEnergyApi {
         setMyData(characteristic.deviceID);
       });
       
-      // Call readCharacteristicForService every second
       let count = 0;
       const intervalId = setInterval(() => {
-        setErrorOne("im in the set Interval count: " + count );
-        count = count + 1;
-        if (connectedDevice) {
-          connectedDevice.readCharacteristicForService(MWserviceUUID, MWoutputUUID)
-            .then((characteristic) => {
-             
-              console.log(characteristic);
-              setMyData(characteristic.id.toString());
-              if(characteristic.value){
 
-                const rawData = base64.decode(characteristic.value + "count" + count);
-                count = count + 1;
+        deviceConnection.readCharacteristicForService(
+          MWserviceUUID,
+          MWoutputUUID
+        ).then((characteristic) => {
+          
+          if(characteristic.value){
 
-                setErrorOne(characteristic.value);
-                setDualSide(rawData[0].charCodeAt(0));
-                setPowerLevel(rawData[1].charCodeAt(0));
-                setMinutes(rawData[2].charCodeAt(0));
-                setSeconds(rawData[3].charCodeAt(0));
-                setEditMode(rawData[4].charCodeAt(0));
-                setRunning(rawData[5].charCodeAt(0));
-                setErrorCode(rawData[6].charCodeAt(0));
-              }
+            const rawData = base64.decode(characteristic.value);
+            count = count + 1;
 
+            setErrorOne(characteristic.value + "count" + count);
+            setDualSide(rawData[0].charCodeAt(0));
+            setPowerLevel(rawData[1].charCodeAt(0));
+            setMinutes(rawData[2].charCodeAt(0));
+            setSeconds(rawData[3].charCodeAt(0));
+            setEditMode(rawData[4].charCodeAt(0));
+            setRunning(rawData[5].charCodeAt(0));
+            setErrorCode(rawData[6].charCodeAt(0));
+          }
 
-            })
-            .catch((error) => {
-              console.log("Error reading characteristic:", error);
-            });
-        } else {
-          deviceConnection.readCharacteristicForService(
-            MWserviceUUID,
-            MWoutputUUID
-          ).then((characteristic) => {
-            setMyData("Im in the else yall. ");
-            if(characteristic.value){
+        });
 
-              const rawData = base64.decode(characteristic.value + "count" + count);
-              count = count + 1;
-
-              setErrorOne(characteristic.value);
-              setDualSide(rawData[0].charCodeAt(0));
-              setPowerLevel(rawData[1].charCodeAt(0));
-              setMinutes(rawData[2].charCodeAt(0));
-              setSeconds(rawData[3].charCodeAt(0));
-              setEditMode(rawData[4].charCodeAt(0));
-              setRunning(rawData[5].charCodeAt(0));
-              setErrorCode(rawData[6].charCodeAt(0));
-            }
-
-          });
-        }
-      }, 1000); 
+        
+      }, 500); 
 
       setIntervalId(intervalId);
       
-      // Clean up the interval when the component unmounts or device disconnects
       const cleanup = () => clearInterval(intervalId);
       deviceConnection.onDisconnected(() => {
         cleanup();
@@ -262,6 +233,51 @@ function useBLE(): BluetoothLowEnergyApi {
       .catch((error) => {
         console.log(error);
       });
+    }
+  };
+
+  const onMachineUpdate = (
+    error: BleError | null,
+    characteristic: Characteristic | null
+  ) => {
+
+    if(connectedDevice) {
+      connectedDevice.readCharacteristicForService(
+        MWserviceUUID,
+        MWoutputUUID
+      );
+    }
+
+    if (error) {
+      console.log(error);
+      return -1;
+    } else if (!characteristic?.value) {
+      console.log("No Data was recieved");
+      return -1;
+    }
+
+    const rawData = base64.decode(characteristic.value);
+
+    setDualSide(rawData[0].charCodeAt(0));
+    setPowerLevel(rawData[1].charCodeAt(0));
+    setMinutes(rawData[2].charCodeAt(0));
+    setSeconds(rawData[3].charCodeAt(0));
+    setEditMode(rawData[4].charCodeAt(0));
+    setRunning(rawData[5].charCodeAt(0));
+    setErrorCode(rawData[6].charCodeAt(0));
+  };
+
+  const startStreamingData = async (device: Device) => {
+    if (device) {
+    
+      device.monitorCharacteristicForService(
+        MWserviceUUID,
+        MWoutputUUID,
+        onMachineUpdate
+      );
+    } else {
+      setErrorOne("no device Connected");
+      console.log("No Device Connected");
     }
   };
 
@@ -354,7 +370,6 @@ function useBLE(): BluetoothLowEnergyApi {
     }
   };
 
-
   const increaseValue = () => {
     if (connectedDevice) {
       connectedDevice.writeCharacteristicWithResponseForService(MWserviceUUID, MWinputUUID, increase )
@@ -416,53 +431,7 @@ function useBLE(): BluetoothLowEnergyApi {
   };
 
 
-  const onMachineUpdate = (
-    error: BleError | null,
-    characteristic: Characteristic | null
-  ) => {
-
-    if(connectedDevice) {
-      connectedDevice.readCharacteristicForService(
-        MWserviceUUID,
-        MWoutputUUID
-      );
-    }
-
-    if (error) {
-      console.log(error);
-      setErrorOne(error.message);
-      return -1;
-    } else if (!characteristic?.value) {
-      console.log("No Data was recieved");
-      setErrorOne("No data was recieved");
-      return -1;
-    }
-
-    setErrorOne("Im in machine Update");
-    const rawData = base64.decode(characteristic.value);
-
-    setDualSide(rawData[0].charCodeAt(0));
-    setPowerLevel(rawData[1].charCodeAt(0));
-    setMinutes(rawData[2].charCodeAt(0));
-    setSeconds(rawData[3].charCodeAt(0));
-    setEditMode(rawData[4].charCodeAt(0));
-    setRunning(rawData[5].charCodeAt(0));
-    setErrorCode(rawData[6].charCodeAt(0));
-  };
-
-  const startStreamingData = async (device: Device) => {
-    if (device) {
-    
-      device.monitorCharacteristicForService(
-        MWserviceUUID,
-        MWoutputUUID,
-        onMachineUpdate
-      );
-    } else {
-      setErrorOne("no device Connected");
-      console.log("No Device Connected");
-    }
-  };
+ 
 
   return {
     scanForPeripherals,
