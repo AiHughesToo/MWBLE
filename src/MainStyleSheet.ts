@@ -90,13 +90,13 @@ const Background = StyleSheet.create({
   const ImageStyles = StyleSheet.create({
     logoContainer: {
       paddingTop: 25,
-      paddingBottom: 10,
+      paddingBottom: 0,
       justifyContent: 'center',
       alignSelf: 'center'
     },
     logoImage: {
-      width: 250,
-      height: 250
+      width: 225,
+      height: 225
     },
     nameImage: {
       width: 150,
@@ -254,7 +254,21 @@ const Background = StyleSheet.create({
       fontSize: 50,
       lineHeight: 55,
       fontWeight: '600'
-  }
+  },
+  inputStyle: {
+    color: '#000',
+    paddingRight: 10,
+    paddingLeft: 10,
+    fontSize: 17,
+    lineHeight: 23,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingTop: 5,
+    paddingBottom: 5,
+    margin: 8
+  },
+
   })
 
 

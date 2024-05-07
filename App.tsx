@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, Text, TouchableOpacity, View, Image, Linking} from "react-native";
+import { SafeAreaView, Text, TouchableOpacity, View, Image, Linking, TextInput} from "react-native";
 import { TextStyles, SectionStyles, ImageStyles, ButtonStyles} from "./src/MainStyleSheet";
 import DeviceModal from "./DeviceConnectionModal";
 import useBLE from "./useBLE";
@@ -19,7 +19,9 @@ const App = () => {
     errorCode,
     errorOne,
     editMode,
+    authenticated,
     disconnectFromDevice,
+    authEmail,
     increaseTimerValue,
     decreaseTimerValue,
     increasePowerValue,
@@ -30,6 +32,7 @@ const App = () => {
   } = useBLE();
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [authedEmail, setAuthedEmail] = useState<string>('');
 
   const scanForDevices = async () => {
     const isPermissionsEnabled = await requestPermissions();
@@ -183,7 +186,7 @@ const App = () => {
               </Text>
             <View style={SectionStyles.rect4}>  
               <Text style={TextStyles.medText}>
-                This Bluetooth remote app is for MagnaWave Julian models manufactured after Jan 1 of 2023.
+                This Bluetooth remote app is for MagnaWave Julian models manufactured after Nov 6 2023.
               </Text>
               <Text style={TextStyles.medText}>
                 For instructions you can visit
@@ -204,22 +207,57 @@ const App = () => {
               </TouchableOpacity>
             </View>
             <View style={SectionStyles.rect5}>
-            <Text style={TextStyles.mainText}>
-              Please connect to a MagnaWave device
-            </Text>
+            
             </View>
           </View>
         )}
       </View>
-      <TouchableOpacity
-        onPress={connectedDevice ? disconnectFromDevice : openModal}
+
+      { authenticated ? 
+        <><View style={SectionStyles.rect5}>
+          <Text style={TextStyles.mainText}>
+            Please connect to a MagnaWave device
+          </Text>
+        </View><TouchableOpacity
+          onPress={connectedDevice ? disconnectFromDevice : openModal}
+          style={ButtonStyles.ctaButton}
+        >
+            <Text style={TextStyles.btnText}>
+              {connectedDevice ? "Disconnect" : "Scan For Devices"}
+            </Text>
+          </TouchableOpacity></> :
+    <>
+    <View style={SectionStyles.rect5}>
+          <Text style={TextStyles.mainText}>
+            Please enter your authorized email to access the app.
+          </Text>
+        </View>
+
+  
+        <TextInput style={TextStyles.inputStyle}
+        placeholder="Authorized Email"
+        onChangeText={(text) => setAuthedEmail(text)}
+        keyboardType='email-address'
+        autoCapitalize="none"
+        autoCorrect={false}
+        />
+    
+
+     <TouchableOpacity
+        onPress={() => authEmail(authedEmail)}
         style={ButtonStyles.ctaButton}
       >
         <Text style={TextStyles.btnText}>
-          {connectedDevice ? "Disconnect" : "Scan For Devices"}
+          {"Sign In"}
         </Text>
       </TouchableOpacity>
+    
+    </>
+    
+    }
+
       <Image source={require('./assets/MagnaWave.png')} style={ImageStyles.nameImage} />
+      
       <DeviceModal
         closeModal={hideModal}
         visible={isModalVisible}

@@ -38,6 +38,7 @@ interface BluetoothLowEnergyApi {
   sessionPause: () => void;
   modeChange: () => void;
   sideChange: () => void;
+  authEmail(email: string): void;
   connectedDevice: Device | null;
   allDevices: Device[];
   powerLevel: number;
@@ -49,6 +50,7 @@ interface BluetoothLowEnergyApi {
   running: number;
   mydata: string;
   errorOne: string;
+  authenticated: boolean;
 }
 
 function useBLE(): BluetoothLowEnergyApi {
@@ -62,6 +64,7 @@ function useBLE(): BluetoothLowEnergyApi {
   const [editMode, setEditMode] = useState<number>(0);
   const [dualSide, setDualSide] = useState<number>(0);
   const [errorCode, setErrorCode] = useState<number>(0);
+  const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [mydata, setMyData] = useState<string>("-");
   const [errorOne, setErrorOne] = useState<string>("--");
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout| null>(null);
@@ -121,6 +124,35 @@ function useBLE(): BluetoothLowEnergyApi {
       return true;
     }
   };
+
+  const authEmail = async (email: string) => {
+    console.log(email);
+    fetch('https://bleapi-2e4a5478bc86.herokuapp.com/validate', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 'item': email })
+    })
+    .then((response) => response.json())
+    .then((response) => {
+
+      console.log(response);
+      console.log(response.error);
+      console.log(response.id);
+      if(response.id){
+        console.log("was true");
+        setAuthenticated(true);
+      } else {
+        console.log("was false");
+        setAuthenticated(false);
+      }
+     
+      return;
+    });
+  };
+
 
   const isDuplicteDevice = (devices: Device[], nextDevice: Device) =>
     devices.findIndex((device) => nextDevice.id === device.id) > -1;
@@ -208,6 +240,7 @@ function useBLE(): BluetoothLowEnergyApi {
       deviceConnection.onDisconnected(() => {
         cleanup();
         setConnectedDevice(null);
+        setAllDevices([]);
       });
   
     // startStreamingData(deviceConnection);
@@ -229,6 +262,7 @@ function useBLE(): BluetoothLowEnergyApi {
           setIntervalId(null);
         }
         setConnectedDevice(null);
+        setAllDevices([]);
       })
       .catch((error) => {
         console.log(error);
@@ -431,8 +465,6 @@ function useBLE(): BluetoothLowEnergyApi {
   };
 
 
- 
-
   return {
     scanForPeripherals,
     requestPermissions,
@@ -448,6 +480,7 @@ function useBLE(): BluetoothLowEnergyApi {
     sessionPause,
     modeChange,
     sideChange,
+    authEmail,
     allDevices,
     connectedDevice,
     powerLevel,
@@ -459,6 +492,7 @@ function useBLE(): BluetoothLowEnergyApi {
     running,
     mydata,
     errorOne,
+    authenticated,
   };
 }
 
