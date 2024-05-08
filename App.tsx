@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View, Image, Linking, TextInput} from "react-native";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TextStyles, SectionStyles, ImageStyles, ButtonStyles} from "./src/MainStyleSheet";
 import DeviceModal from "./DeviceConnectionModal";
 import useBLE from "./useBLE";
@@ -184,7 +185,14 @@ const App = () => {
             <Text style={TextStyles.appTitleText}>
                 MagnaWave Remote App
               </Text>
-            <View style={SectionStyles.rect4}>  
+           
+          </View>
+        )}
+      </View>
+
+      { authenticated ? 
+        <>
+         <View style={SectionStyles.rect4}>  
               <Text style={TextStyles.medText}>
                 This Bluetooth remote app is for MagnaWave Julian models manufactured after Nov 6 2023.
               </Text>
@@ -206,15 +214,7 @@ const App = () => {
                   </Text>
               </TouchableOpacity>
             </View>
-            <View style={SectionStyles.rect5}>
-            
-            </View>
-          </View>
-        )}
-      </View>
-
-      { authenticated ? 
-        <><View style={SectionStyles.rect5}>
+        <View style={SectionStyles.rect5}>
           <Text style={TextStyles.mainText}>
             Please connect to a MagnaWave device
           </Text>
@@ -227,6 +227,8 @@ const App = () => {
             </Text>
           </TouchableOpacity></> :
     <>
+    <View style={{ flex:1, paddingLeft: 5, paddingRight: 5 }}>
+    
     <View style={SectionStyles.rect5}>
           <Text style={TextStyles.mainText}>
             Please enter your authorized email to access the app.
@@ -251,7 +253,8 @@ const App = () => {
           {"Sign In"}
         </Text>
       </TouchableOpacity>
-    
+  
+      </View>
     </>
     
     }
