@@ -182,82 +182,78 @@ const App = () => {
             <View style={ImageStyles.logoContainer}> 
               <Image source={require('./assets/adaptive-icon.png')} style={ImageStyles.logoImage} />
             </View>
-            <Text style={TextStyles.appTitleText}>
-                MagnaWave Remote App
-              </Text>
-           
-          </View>
+            <Text style={TextStyles.appTitleText}>MagnaWave Remote App</Text>
+            {authenticated ? (
+<>
+                <View style={SectionStyles.rect4}>  
+
+                <Text style={TextStyles.medText}>This Bluetooth remote app is for MagnaWave Julian models manufactured after Nov 6 2023.</Text>
+                <Text style={TextStyles.medText}>For instructions you can visit</Text>
+
+                <TouchableOpacity onPress={handlePress}>
+                    <Text style={{ color: 'white', textDecorationLine: 'underline', fontSize: 16 }}>magnawavepemf.com/ble_instructions</Text>
+                </TouchableOpacity>
+
+                <Text style={TextStyles.medText}>For service and support visit</Text>
+
+                <TouchableOpacity onPress={handlePressToo}>
+                    <Text style={{ color: 'white', textDecorationLine: 'underline', fontSize: 16 }}>magnawavepemf.com/support</Text>
+                </TouchableOpacity>
+
+                </View>  
+                <View style={SectionStyles.rect5}>
+                <Text style={TextStyles.mainText}>Please connect to a MagnaWave device</Text>
+                </View>
+                </>
+            ) : (
+              <>
+              <View style={{ flex:1, paddingLeft: 5, paddingRight: 5 }}>
+              
+              <View style={SectionStyles.rect5}>
+                    <Text style={TextStyles.mainText}>
+                      Please enter your authorized email to access the app.
+                    </Text>
+                  </View>
+
+                  <TextInput style={TextStyles.inputStyle}
+                  placeholder="Authorized Email"
+                  onChangeText={(text) => setAuthedEmail(text)}
+                  keyboardType='email-address'
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  />
+              
+               <TouchableOpacity
+                  onPress={() => authEmail(authedEmail)}
+                  style={ButtonStyles.ctaButton}
+                >
+                  <Text style={TextStyles.btnText}>
+                    {"Sign In"}
+                  </Text>
+                </TouchableOpacity>
+            
+                </View>
+              </>
+            )}
+
+       </View>
         )}
+
+          {authenticated ? (
+            <>
+             <TouchableOpacity
+              onPress={connectedDevice ? disconnectFromDevice : openModal}
+              style={ButtonStyles.ctaButton}>
+              <Text style={TextStyles.btnText}>{connectedDevice ? "Disconnect" : "Scan For Devices"} </Text>
+          </TouchableOpacity>
+            </>
+          ) : (
+            <>
+            </>
+          )}
+         
+
       </View>
-
-      { authenticated ? 
-        <>
-         <View style={SectionStyles.rect4}>  
-              <Text style={TextStyles.medText}>
-                This Bluetooth remote app is for MagnaWave Julian models manufactured after Nov 6 2023.
-              </Text>
-              <Text style={TextStyles.medText}>
-                For instructions you can visit
-              </Text>
-              <TouchableOpacity onPress={handlePress}>
-                  <Text style={{ color: 'white', textDecorationLine: 'underline', fontSize: 16 }}>
-                    magnawavepemf.com/ble_instructions
-                  </Text>
-              </TouchableOpacity>
-
-              <Text style={TextStyles.medText}>
-                For service and support visit
-              </Text>
-              <TouchableOpacity onPress={handlePressToo}>
-                  <Text style={{ color: 'white', textDecorationLine: 'underline', fontSize: 16 }}>
-                    magnawavepemf.com/support
-                  </Text>
-              </TouchableOpacity>
-            </View>
-        <View style={SectionStyles.rect5}>
-          <Text style={TextStyles.mainText}>
-            Please connect to a MagnaWave device
-          </Text>
-        </View><TouchableOpacity
-          onPress={connectedDevice ? disconnectFromDevice : openModal}
-          style={ButtonStyles.ctaButton}
-        >
-            <Text style={TextStyles.btnText}>
-              {connectedDevice ? "Disconnect" : "Scan For Devices"}
-            </Text>
-          </TouchableOpacity></> :
-    <>
-    <View style={{ flex:1, paddingLeft: 5, paddingRight: 5 }}>
-    
-    <View style={SectionStyles.rect5}>
-          <Text style={TextStyles.mainText}>
-            Please enter your authorized email to access the app.
-          </Text>
-        </View>
-
-  
-        <TextInput style={TextStyles.inputStyle}
-        placeholder="Authorized Email"
-        onChangeText={(text) => setAuthedEmail(text)}
-        keyboardType='email-address'
-        autoCapitalize="none"
-        autoCorrect={false}
-        />
-    
-
-     <TouchableOpacity
-        onPress={() => authEmail(authedEmail)}
-        style={ButtonStyles.ctaButton}
-      >
-        <Text style={TextStyles.btnText}>
-          {"Sign In"}
-        </Text>
-      </TouchableOpacity>
-  
-      </View>
-    </>
-    
-    }
 
       <Image source={require('./assets/MagnaWave.png')} style={ImageStyles.nameImage} />
       

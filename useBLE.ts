@@ -126,7 +126,7 @@ function useBLE(): BluetoothLowEnergyApi {
   };
 
   const authEmail = async (email: string) => {
-    console.log(email);
+  
     fetch('https://bleapi-2e4a5478bc86.herokuapp.com/validate', {
       method: 'POST',
       headers: {
@@ -137,15 +137,12 @@ function useBLE(): BluetoothLowEnergyApi {
     })
     .then((response) => response.json())
     .then((response) => {
-
-      console.log(response);
-      console.log(response.error);
-      console.log(response.id);
+  
       if(response.id){
-        console.log("was true");
+       
         setAuthenticated(true);
       } else {
-        console.log("was false");
+        console.log(response.error);
         setAuthenticated(false);
       }
      
