@@ -7,7 +7,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>expo-ble-sample</string>
+    <string>MagnaWave Remote App</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -19,7 +19,7 @@
     <key>CFBundlePackageType</key>
     <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0.0</string>
+    <string>1.0.4</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleURLTypes</key>
@@ -27,7 +27,13 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>com.dfriyia2.expoblesample</string>
+          <string>com.magnawavepemf.mwremoteapp</string>
+        </array>
+      </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>exp+magnawave-remote-app</string>
         </array>
       </dict>
     </array>
@@ -49,7 +55,7 @@
       </dict>
     </dict>
     <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>Allow $(PRODUCT_NAME) to connect to bluetooth devices</string>
+    <string>To display current settings of, and allow the user to adjust the power and timer settings, and start and stop sessions on Bluetooth enabled MagnaWave machines.</string>
     <key>UIBackgroundModes</key>
     <array>
       <string>bluetooth-central</string>

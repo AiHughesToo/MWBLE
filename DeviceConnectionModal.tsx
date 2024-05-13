@@ -1,14 +1,7 @@
 import React, { FC, useCallback } from "react";
-import {
-  FlatList,
-  ListRenderItemInfo,
-  Modal,
-  SafeAreaView,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { FlatList, ListRenderItemInfo, Modal, SafeAreaView, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Device } from "react-native-ble-plx";
+import { TextStyles, ButtonStyles} from "./src/MainStyleSheet";
 
 type DeviceModalListItemProps = {
   item: ListRenderItemInfo<Device>;
@@ -73,6 +66,13 @@ const DeviceModal: FC<DeviceModalProps> = (props) => {
           data={devices}
           renderItem={renderDeviceModalListItem}
         />
+
+      <TouchableOpacity
+        onPress={closeModal}
+        style={ButtonStyles.ctaButton}
+      >
+        <Text style={TextStyles.btnText}>Cancel</Text>
+      </TouchableOpacity>
       </SafeAreaView>
     </Modal>
   );

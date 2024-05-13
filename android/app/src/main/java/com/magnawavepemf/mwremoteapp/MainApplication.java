@@ -1,4 +1,4 @@
-package com.dfriyia2.expoblesample;
+package com.magnawavepemf.mwremoteapp;
 
 import android.app.Application;
 import android.content.res.Configuration;

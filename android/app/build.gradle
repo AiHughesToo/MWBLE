@@ -83,11 +83,11 @@ android {
 
     namespace 'com.dfriyia2.expoblesample'
     defaultConfig {
-        applicationId 'com.dfriyia2.expoblesample'
+        applicationId 'com.magnawavepemf.mwremoteapp'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.1"
 
         buildConfigField("boolean", "REACT_NATIVE_UNSTABLE_USE_RUNTIME_SCHEDULER_ALWAYS", (findProperty("reactNative.unstable_useRuntimeSchedulerAlways") ?: true).toString())
     }
