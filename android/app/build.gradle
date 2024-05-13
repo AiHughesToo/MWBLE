@@ -81,7 +81,7 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'com.dfriyia2.expoblesample'
+    namespace 'com.magnawavepemf.mwremoteapp'
     defaultConfig {
         applicationId 'com.magnawavepemf.mwremoteapp'
         minSdkVersion rootProject.ext.minSdkVersion
